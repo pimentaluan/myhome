@@ -7,8 +7,10 @@ import myhome.domain.Anuncio;
 import myhome.domain.Imovel;
 import myhome.factory.ApartamentoFactory;
 import myhome.factory.CasaFactory;
+import myhome.factory.ImovelComercialFactory;
 import myhome.factory.ImovelFactoryRegistry;
 import myhome.factory.ImovelSpec;
+import myhome.factory.TerrenoFactory;
 import myhome.moderation.MinTitleLengthRule;
 import myhome.moderation.ModerationChain;
 import myhome.moderation.ModerationService;
@@ -27,6 +29,8 @@ public class Main {
         var registry = new ImovelFactoryRegistry();
         registry.registrar(new ApartamentoFactory());
         registry.registrar(new CasaFactory());
+        registry.registrar(new ImovelComercialFactory());
+        registry.registrar(new TerrenoFactory());
 
         var dispatcher = new StatusChangeDispatcher();
         dispatcher.registrar(new StatusChangeLogListener());
@@ -40,21 +44,21 @@ public class Main {
         var moderationService = new ModerationService(chain);
 
         var anunciante = new Anunciante("Corretor João");
-        Imovel ap = registry.criar(new ImovelSpec("APARTAMENTO", Map.of("area", "70.0", "preco", "250000.0", "andar","8","elevador","true")));
+        Imovel ap = registry.criar(new ImovelSpec("APARTAMENTO", Map.of("area", "70.0", "preco", "250000.0", "localizacao", "altiplano","andar","8","elevador","true", "quartos", "3")));
 
         var a1 = new Anuncio("Apartamento perto da praia", ap, anunciante);
         repo.salvar(a1);
         var ctx1 = new AnuncioContext(a1, dispatcher);
         var r1 = moderationService.submeterParaModeracao(ctx1);
 
-        Imovel ap2 = registry.criar(new ImovelSpec("APARTAMENTO", Map.of("area", "40.0", "preco", "5000.0", "andar","3","elevador","false"))); 
+        Imovel ap2 = registry.criar(new ImovelSpec("APARTAMENTO", Map.of("area", "40.0", "preco", "5000.0", "localizacao", "centro","andar","3","elevador","false", "quartos", "2"))); 
 
         var a2 = new Anuncio("Apto barato", ap2, anunciante);
         repo.salvar(a2);
         var ctx2 = new AnuncioContext(a2, dispatcher);
         var r2 = moderationService.submeterParaModeracao(ctx2);
 
-        Imovel ap3 = registry.criar(new ImovelSpec("APARTAMENTO", Map.of("area", "55.0", "preco", "200000.0", "andar","5","elevador","true")));
+        Imovel ap3 = registry.criar(new ImovelSpec("APARTAMENTO", Map.of("area", "55.0", "preco", "200000.0", "localizacao", "bancários", "andar","5","elevador","true", "quartos", "3")));
         var a3 = new Anuncio("Golpe imperdível de apartamento", ap3, anunciante);
         repo.salvar(a3);
         var ctx3 = new AnuncioContext(a3, dispatcher);

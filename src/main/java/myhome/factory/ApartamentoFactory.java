@@ -14,8 +14,10 @@ public class ApartamentoFactory implements ImovelFactory {
     public Imovel criar(ImovelSpec spec) {
         double area = Double.parseDouble(spec.getOrDefault("area", "0"));
         double preco = Double.parseDouble(spec.getOrDefault("preco", "0"));
+        String localizacao = spec.getOrDefault("localizacao", "");
         int andar = Integer.parseInt(spec.getOrDefault("andar", "0"));
         boolean elevador = Boolean.parseBoolean(spec.getOrDefault("elevador", "false"));
-        return new Apartamento(area, preco, andar, elevador);
+        int quartos = Integer.parseInt(spec.getOrDefault("quartos", "0"));
+        return new Apartamento(area, preco, localizacao, andar, elevador, quartos);
     }
 }

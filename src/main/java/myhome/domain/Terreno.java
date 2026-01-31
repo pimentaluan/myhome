@@ -3,8 +3,8 @@ package myhome.domain;
 public class Terreno extends Imovel {
     private final String zoneamento;
 
-    public Terreno(double area, double preco, String zoneamento) {
-        super(area, preco);
+    public Terreno(double area, double preco, String localizacao, String zoneamento) {
+        super(area, preco, localizacao);
         this.zoneamento = zoneamento;
     }
 
@@ -14,11 +14,11 @@ public class Terreno extends Imovel {
 
     @Override
     public String resumo() {
-        return String.format("Área: %.2f, Zoneamento: %s", this.area(), zoneamento);
+        return String.format("Área: %.2f, Zoneamento: %s", this.getArea(), zoneamento);
     }
 
     @Override
     public Imovel copiar() {
-        return new Terreno(this.area(), this.preco(), this.zoneamento);
+        return new Terreno(this.getArea(), this.getPreco(), this.getLocalizacao(), this.zoneamento);
     }
 }

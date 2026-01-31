@@ -3,8 +3,8 @@ package myhome.domain;
 public class ImovelComercial extends Imovel {
     private final String finalidade;
 
-    public ImovelComercial(double area, double preco, String finalidade) {
-        super(area, preco);
+    public ImovelComercial(double area, double preco, String localizacao, String finalidade) {
+        super(area, preco, localizacao);
         this.finalidade = finalidade;
     }
 
@@ -14,12 +14,12 @@ public class ImovelComercial extends Imovel {
 
     @Override
     public String resumo() {
-        return String.format("Área: %.2f, Finalidade: %s", this.area(), finalidade);
+        return String.format("Área: %.2f, Finalidade: %s", this.getArea(), finalidade);
     }
 
     @Override
     public Imovel copiar() {
-        return new ImovelComercial(this.area(), this.preco(), this.finalidade);
+        return new ImovelComercial(this.getArea(), this.getPreco(), this.getLocalizacao(), this.finalidade);
     }
     
 }

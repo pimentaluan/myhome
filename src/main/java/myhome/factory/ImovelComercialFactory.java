@@ -13,8 +13,9 @@ public class ImovelComercialFactory implements ImovelFactory {
     public Imovel criar(ImovelSpec spec) {
         double area = Double.parseDouble(spec.getOrDefault("area", "0"));
         double preco = Double.parseDouble(spec.getOrDefault("preco", "0"));
+        String localizacao = spec.getOrDefault("localizacao", "");
         String finalidade = spec.getOrDefault("finalidade", "GERAL");
-        return new ImovelComercial(area, preco, finalidade);
+        return new ImovelComercial(area, preco, localizacao, finalidade);
     }
     
 }

@@ -18,7 +18,7 @@ public class Anuncio {
 
     public String getId() { return id; }
     public String getTitulo() { return titulo; }
-    public double getPreco() { return imovel.preco(); }
+    public double getPreco() { return imovel.getPreco(); }
     public Imovel getImovel() { return imovel; }
     public Anunciante getAnunciante() { return anunciante; }
     public AnuncioStatus getStatus() { return status; }
@@ -32,8 +32,9 @@ public class Anuncio {
         return "Anuncio{\n id=" + id +
                 ",\n titulo='" + titulo + '\'' +
                 ",\n preco=" + getPreco() +
+                ",\n localizacao=" + imovel.getLocalizacao() +
                 ",\n imovel=" + imovel.tipo() +
-                "(área=" +imovel.area() + ", " + imovel.resumo() + ")" +
+                "(área=" +imovel.getArea() + ", " + imovel.resumo() + ")" +
                 ",\n anunciante=" + anunciante.getNome() +
                 ",\n status=" + status +
                 "\n} " +
