@@ -1,10 +1,11 @@
 package myhome.domain;
 
-public class Apartamento implements Imovel {
+public class Apartamento extends Imovel {
     private final int andar;
     private final boolean elevador;
 
-    public Apartamento(int andar, boolean elevador) {
+    public Apartamento(double area, double preco, int andar, boolean elevador) {
+        super(area, preco);
         this.andar = andar;
         this.elevador = elevador;
     }
@@ -21,6 +22,6 @@ public class Apartamento implements Imovel {
 
     @Override
     public Imovel copiar() {
-        return new Apartamento(this.andar, this.elevador);
+        return new Apartamento(this.area(), this.preco(), this.andar, this.elevador);
     }
 }

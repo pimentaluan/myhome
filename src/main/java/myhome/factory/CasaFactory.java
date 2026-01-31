@@ -12,7 +12,9 @@ public class CasaFactory implements ImovelFactory {
 
     @Override
     public Imovel criar(ImovelSpec spec) {
+        double area = Double.parseDouble(spec.getOrDefault("area", "0"));
+        double preco = Double.parseDouble(spec.getOrDefault("preco", "0"));
         boolean quintal = Boolean.parseBoolean(spec.getOrDefault("quintal", "false"));
-        return new Casa(quintal);
+        return new Casa(area, preco, quintal);
     }
 }
