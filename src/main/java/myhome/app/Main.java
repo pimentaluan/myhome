@@ -2,6 +2,10 @@ package myhome.app;
 
 import java.util.Map;
 
+import myhome.busca.BuscadorAnuncio;
+import myhome.busca.BuscadorPadrao;
+import myhome.busca.FiltroLocalizacaoDecorator;
+import myhome.busca.FiltroQuartosDecorator;
 import myhome.domain.Anunciante;
 import myhome.domain.Anuncio;
 import myhome.domain.Imovel;
@@ -21,6 +25,7 @@ import myhome.state.AnuncioContext;
 import myhome.state.StatusChangeDispatcher;
 import myhome.state.StatusChangeLogListener;
 import myhome.state.StatusChangeNotifyListener;
+
 
 public class Main {
     public static void main(String[] args) {
@@ -64,12 +69,52 @@ public class Main {
         var ctx3 = new AnuncioContext(a3, dispatcher);
         var r3 = moderationService.submeterParaModeracao(ctx3);
 
+        Imovel casa1= registry.criar(new ImovelSpec("CASA", Map.of("area", "120.0", "preco", "300000.0", "localizacao", "mangabeira","quintal","true", "quartos", "4")));
+        var a4 = new Anuncio("Casa com quintal grande", casa1, anunciante);
+        repo.salvar(a4);
+        var ctx4 = new AnuncioContext(a4, dispatcher);
+        var r4 = moderationService.submeterParaModeracao(ctx4);
+        
+        Imovel terreno1= registry.criar(new ImovelSpec("TERRENO", Map.of("area", "500.0", "preco", "150000.0", "localizacao", "tabatinga","zoneamento","residencial")));
+        var a5 = new Anuncio("Terreno espaçoso", terreno1, anunciante);
+        repo.salvar(a5);
+        var ctx5 = new AnuncioContext(a5, dispatcher);
+        var r5 = moderationService.submeterParaModeracao(ctx5);
+
+        Imovel imovelComercial1= registry.criar(new ImovelSpec("IMOVEL_COMERCIAL", Map.of("area", "300.0", "preco", "800000.0", "localizacao", "centro","finalidade","comercial")));
+        var a6 = new Anuncio("Ponto comercial no centro", imovelComercial1, anunciante);
+        repo.salvar(a6);
+        var ctx6 = new AnuncioContext(a6, dispatcher);
+        var r6 = moderationService.submeterParaModeracao(ctx6);
+
         System.out.println("\n=== RESULTADOS MODERACAO ===");
         System.out.println("A1: " + r1.decision() + " motivos=" + r1.motivos());
         System.out.println("A2: " + r2.decision() + " motivos=" + r2.motivos());
         System.out.println("A3: " + r3.decision() + " motivos=" + r3.motivos());
+        System.out.println("A4: " + r4.decision() + " motivos=" + r4.motivos());
+        System.out.println("A5: " + r5.decision() + " motivos=" + r5.motivos());
+        System.out.println("A6: " + r6.decision() + " motivos=" + r6.motivos());
 
         System.out.println("\n=== STATUS FINAIS ===");
         repo.listarTodos().forEach(System.out::println);
+
+    BuscadorAnuncio buscador = new BuscadorPadrao();
+    System.out.println("\n=== BUSCA PERSONALIZADA ===");
+    //buscador = new FiltroAreaMinima(buscador, 100.0);
+    //buscador = new FiltroPrecoDecorator(buscador, 200000.0);
+    buscador = new FiltroLocalizacaoDecorator(buscador, "mangabeira");
+
+    //buscador = new FiltroQuintalDecorator(buscador);
+    //buscador = new FiltroElevadorDecorator(buscador);
+    buscador = new FiltroQuartosDecorator(buscador, 2);
+
+
+    var resultados = buscador.buscar(repo.listarTodos());
+
+    if (resultados.isEmpty()) {
+        System.out.println("Nenhum anúncio encontrado com os filtros aplicados.");
+    } else {
+        resultados.forEach(a -> System.out.println("-> " + a.getTitulo() + " | " + a.getImovel().tipo()));
     }
+}
 }
