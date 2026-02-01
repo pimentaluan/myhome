@@ -10,7 +10,7 @@ public class Casa extends Imovel {
         this.quartos = quartos;
     }
 
-    public boolean isQuintal() { return quintal; }
+    @Override
     public int getQuartos() { return quartos; }
 
     @Override public String tipo() { return "CASA"; }
@@ -23,5 +23,10 @@ public class Casa extends Imovel {
     @Override
     public Imovel copiar() {
         return new Casa(this.getArea(), this.getPreco(), this.getLocalizacao(), this.quintal, this.quartos);
+    }
+
+    @Override
+    public boolean temQuintal() {
+        return this.quintal;
     }
 }

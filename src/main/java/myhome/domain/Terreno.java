@@ -8,6 +8,7 @@ public class Terreno extends Imovel {
         this.zoneamento = zoneamento;
     }
 
+    @Override
     public String getZoneamento() { return zoneamento; }
 
     @Override public String tipo() { return "TERRENO"; }
@@ -21,4 +22,5 @@ public class Terreno extends Imovel {
     public Imovel copiar() {
         return new Terreno(this.getArea(), this.getPreco(), this.getLocalizacao(), this.zoneamento);
     }
+
 }

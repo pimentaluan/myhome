@@ -13,7 +13,7 @@ public class Apartamento extends Imovel {
     }
 
     public int getAndar() { return andar; }
-    public boolean isElevador() { return elevador; }
+    @Override
     public int getQuartos() { return quartos; }
 
     @Override public String tipo() { return "APARTAMENTO"; }
@@ -26,5 +26,10 @@ public class Apartamento extends Imovel {
     @Override
     public Imovel copiar() {
         return new Apartamento(this.getArea(), this.getPreco(), this.getLocalizacao(), this.andar, this.elevador, this.quartos);
+    }
+
+    @Override
+    public boolean temElevador() {
+        return this.elevador;
     }
 }

@@ -21,6 +21,22 @@ public abstract class Imovel {
         return localizacao;
     }
 
+    public int getQuartos() {
+        return 0;
+    }
+    public boolean temElevador() {
+        return false;
+    }
+    public boolean temQuintal() {
+        return false;
+    }
+    public String getZoneamento() {
+        return "Não se aplica";
+    }
+    public String getFinalidade() {
+        return "Não se aplica";
+    }
+
     public abstract String tipo ();
     public abstract String resumo();
     public abstract Imovel copiar();  

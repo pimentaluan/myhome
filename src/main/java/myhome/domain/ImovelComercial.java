@@ -8,6 +8,7 @@ public class ImovelComercial extends Imovel {
         this.finalidade = finalidade;
     }
 
+    @Override
     public String getFinalidade() { return finalidade; }
 
     @Override public String tipo() { return "IMOVEL_COMERCIAL"; }
