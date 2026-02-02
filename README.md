@@ -79,7 +79,7 @@ O projeto foi desenvolvido com foco em extensibilidade (Open/Closed), aplicando 
 - **Chain of Responsibility**  
   Utilizado no processo de moderação de anúncios, permitindo combinar regras dinâmicas e extensíveis de validação sem acoplamento ao fluxo principal (RF03).
 
-  **Decorator**
+- **Decorator**  
   Utilizado para atribuir comportamentos de filtragem a um objeto dinamicamente (RF06)
 
 ---
@@ -114,7 +114,7 @@ Mudança de estado dispara evento (`StatusChangeEvent`) para listeners (Observer
   - `AUTO_REPROVAR` → vai para `SUSPENSO`
   - `MANUAL` → permanece em `MODERACAO`
 
-  ### RF06 - Pesquisa e visualização
+  ### RF06 — Pesquisa e visualização
 - Utilizado para permitir a aplicação de vários   filtros de busca ao mesmo tempo
 - Filtros disponíveis:
 - Localização, preço, área mínima (comuns a todos)
