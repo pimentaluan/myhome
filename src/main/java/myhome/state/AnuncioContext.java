@@ -41,6 +41,8 @@ public class AnuncioContext {
                 anuncio.getId(),
                 anuncio.getTitulo(),
                 anuncio.getAnunciante().getNome(),
+                anuncio.getAnunciante().getContato(),         
+                anuncio.getAnunciante().getPreferenciaCanal(),
                 de,
                 para,
                 Instant.now()
