@@ -114,7 +114,7 @@ public class Main {
     if (resultados.isEmpty()) {
         System.out.println("Nenhum anúncio encontrado com os filtros aplicados.");
     } else {
-        resultados.forEach(a -> System.out.println("-> " + a.getTitulo() + " | " + a.getImovel().tipo()));
+        resultados.forEach(System.out::println);
     }
 }
 }
