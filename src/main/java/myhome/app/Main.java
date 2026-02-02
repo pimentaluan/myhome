@@ -21,6 +21,7 @@ import myhome.moderation.ModerationService;
 import myhome.moderation.PriceRule;
 import myhome.moderation.ProhibitedTermsRule;
 import myhome.prototype.ImovelRegistry;
+import myhome.proxy.ImagemProxy;
 import myhome.repository.AnuncioRepository;
 import myhome.state.AnuncioContext;
 import myhome.state.StatusChangeDispatcher;
@@ -104,6 +105,24 @@ public class Main {
                 var ctx7 = new AnuncioContext(a7, dispatcher);
                 var r7 = moderationService.submeterParaModeracao(ctx7);
 
+                
+var a8 = new Anuncio("Apartamento perto da praia", ap, anunciante);
+
+
+a8.setFoto(new ImagemProxy("apto_praia_01.jpg")); 
+
+repo.salvar(a8);
+
+
+System.out.println("\n=== TESTE PROXY VIRTUAL (RF08) ===");
+System.out.println("Acessando foto do anúncio A8...");
+
+a8.getFoto().exibir();
+
+
+System.out.println("\nAcessando foto do anúncio A8 novamente...");
+a8.getFoto().exibir();
+
                 System.out.println("\n=== RESULTADOS MODERACAO ===");
                 System.out.println("A1: " + r1.decision() + " motivos=" + r1.motivos());
                 System.out.println("A2: " + r2.decision() + " motivos=" + r2.motivos());
@@ -112,18 +131,21 @@ public class Main {
                 System.out.println("A5: " + r5.decision() + " motivos=" + r5.motivos());
                 System.out.println("A6: " + r6.decision() + " motivos=" + r6.motivos());
                 System.out.println("A7: " + r7.decision() + " motivos=" + r7.motivos());
+                a7.setFoto(new ImagemProxy("casa_luxo.jpg"));
+                System.out.println(a7.getTitulo());
+                a7.getFoto().exibir();
 
                 System.out.println("\n=== STATUS FINAIS ===");
                 repo.listarTodos().forEach(System.out::println);
 
                 BuscadorAnuncio buscador = new BuscadorPadrao();
                 System.out.println("\n=== BUSCA PERSONALIZADA ===");
-                // buscador = new FiltroAreaMinima(buscador, 100.0);
-                // buscador = new FiltroPrecoDecorator(buscador, 200000.0);
+                
+                
                 buscador = new FiltroLocalizacaoDecorator(buscador, "mangabeira");
 
-                // buscador = new FiltroQuintalDecorator(buscador);
-                // buscador = new FiltroElevadorDecorator(buscador);
+                
+                
                 buscador = new FiltroQuartosDecorator(buscador, 2);
 
                 var resultados = buscador.buscar(repo.listarTodos());
