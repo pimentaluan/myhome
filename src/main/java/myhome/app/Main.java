@@ -115,11 +115,10 @@ public class Main {
 
         var resultados = buscador.buscar(repo.listarTodos());
 
-        if (resultados.isEmpty()) {
-            System.out.println("Nenhum anúncio encontrado com os filtros aplicados.");
-        } else {
-            resultados.forEach(a -> System.out.println("-> " + a.getTitulo() + " | " + a.getImovel().tipo()));
-        }
-
+    if (resultados.isEmpty()) {
+        System.out.println("Nenhum anúncio encontrado com os filtros aplicados.");
+    } else {
+        resultados.forEach(System.out::println);
     }
+}
 }

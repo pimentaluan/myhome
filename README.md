@@ -8,7 +8,7 @@ Projeto em **Java** para um sistema de classificados de imóveis, aplicando **Pa
 > - Ciclo de vida de anúncio com **State + Observer** (RF04)
 > - Moderação dinâmica com **Chain of Responsibility** (RF03)
 > - Notificações multi-canal com **1 canal real** (RF05) — **a ser implementado**
-> - Busca com filtros combináveis (RF06) — **a ser implementado**
+> - Busca com filtros combináveis (RF06) 
 > - Novo requisito + novo padrão (RF08) — **a ser implementado**
 
 ---
@@ -52,6 +52,8 @@ Exemplos usados:
 - `myhome.factory` — Factory registrável + presets
 - `myhome.state` — State + Observer (mudança de status)
 - `myhome.moderation` — Chain of Responsibility (regras de moderação)
+- `myhome.busca` - Decorator
+(filtros combináveis para anúncios)
 
 ---
 
@@ -76,6 +78,9 @@ O projeto foi desenvolvido com foco em extensibilidade (Open/Closed), aplicando 
 
 - **Chain of Responsibility**  
   Utilizado no processo de moderação de anúncios, permitindo combinar regras dinâmicas e extensíveis de validação sem acoplamento ao fluxo principal (RF03).
+
+- **Decorator**  
+  Utilizado para atribuir comportamentos de filtragem a um objeto dinamicamente (RF06)
 
 ---
 
@@ -108,3 +113,13 @@ Mudança de estado dispara evento (`StatusChangeEvent`) para listeners (Observer
   - `AUTO_APROVAR` → passa para `ATIVO`
   - `AUTO_REPROVAR` → vai para `SUSPENSO`
   - `MANUAL` → permanece em `MODERACAO`
+
+  ### RF06 — Pesquisa e visualização
+- Utilizado para permitir a aplicação de vários   filtros de busca ao mesmo tempo
+- Filtros disponíveis:
+- Localização, preço, área mínima (comuns a todos)
+- Quartos
+- Quintal
+- Elevador
+- Finalidade
+- Zoneamento 
