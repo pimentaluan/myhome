@@ -2,14 +2,14 @@
 
 Projeto em **Java** para um sistema de classificados de imóveis, aplicando **Padrões de Projeto** e princípios de **extensibilidade** (Open/Closed), conforme enunciado da disciplina.
 
-> - Configuração via `.properties` (RF07)
-> - Criação extensível de tipos de Imóvel (RF01)
-> - Presets clonáveis (Prototype) (RF02)
-> - Ciclo de vida de anúncio com **State + Observer** (RF04)
-> - Moderação dinâmica com **Chain of Responsibility** (RF03)
-> - Notificações multi-canal com **1 canal real** (RF05) — **a ser implementado**
-> - Busca com filtros combináveis (RF06) 
-> - Novo requisito + novo padrão (RF08) — **a ser implementado**
+> - Configuração via `.properties` (RF07)  
+> - Criação extensível de tipos de Imóvel (RF01)  
+> - Presets clonáveis (Prototype) (RF02)  
+> - Ciclo de vida de anúncio com **State + Observer** (RF04)  
+> - Moderação dinâmica com **Chain of Responsibility** (RF03)  
+> - Notificações multi-canal com **1 canal real** (RF05)  
+> - Busca com filtros combináveis (RF06)  
+> - Novo requisito + novo padrão (RF08)
 
 ---
 
@@ -22,15 +22,16 @@ Projeto em **Java** para um sistema de classificados de imóveis, aplicando **Pa
 ---
 
 ## Como rodar
-#### Opção A
+
+### Opção A
 ```bash
 mvn -q exec:java
 ```
-#### Opção B
-1. Abra o projeto no VS Code
-2. Abra `src/main/java/myhome/app/Main.java`
-3. Clique em **Run** (ou `Ctrl+F5`)
 
+### Opção B
+1. Abra o projeto no VS Code  
+2. Abra `src/main/java/myhome/app/Main.java`  
+3. Clique em **Run** (ou `Ctrl+F5`)
 
 ---
 
@@ -50,10 +51,12 @@ Exemplos usados:
 - `myhome.domain` — entidades (Usuario, Anuncio, Imovel, etc.)
 - `myhome.repository` — repositórios em memória
 - `myhome.factory` — Factory registrável + presets
+- `myhome.prototype` — Registry de protótipos (Prototype)
 - `myhome.state` — State + Observer (mudança de status)
 - `myhome.moderation` — Chain of Responsibility (regras de moderação)
-- `myhome.busca` - Decorator
-(filtros combináveis para anúncios)
+- `myhome.busca` — Decorator (filtros combináveis)
+- `myhome.proxy` — Proxy (controle de carregamento)
+- `myhome.notification` — API / canais de notificação
 
 ---
 
@@ -80,7 +83,13 @@ O projeto foi desenvolvido com foco em extensibilidade (Open/Closed), aplicando 
   Utilizado no processo de moderação de anúncios, permitindo combinar regras dinâmicas e extensíveis de validação sem acoplamento ao fluxo principal (RF03).
 
 - **Decorator**  
-  Utilizado para atribuir comportamentos de filtragem a um objeto dinamicamente (RF06)
+  Utilizado para atribuir comportamentos de filtragem a um objeto dinamicamente (RF06).
+
+- **Proxy**  
+  Utilizado para controlar o acesso a recursos pesados, adiando sua criação até o momento de uso (RF08).
+
+- **Strategy / API**  
+  Utilizado para envio de notificações por diferentes canais, com integração real via serviço externo (RF05).
 
 ---
 
@@ -89,37 +98,64 @@ O projeto foi desenvolvido com foco em extensibilidade (Open/Closed), aplicando 
 ### RF01 — Tipos de imóvel extensíveis
 - Criação de imóveis por tipo através do `ImovelFactoryRegistry`
 - Para adicionar um novo tipo:
-  1) criar `NovoTipo implements Imovel`
-  2) criar `NovoTipoFactory implements ImovelFactory`
+  1) criar `NovoTipo implements Imovel`  
+  2) criar `NovoTipoFactory implements ImovelFactory`  
   3) registrar no `ImovelFactoryRegistry`
 
+---
+
 ### RF02 — Presets clonáveis
-- `ImovelPresetCatalog` guarda modelos padrão
-- Ao criar a partir de preset, usa `copiar()` (Prototype)
+- `ImovelPresetCatalog` e `ImovelRegistry` guardam modelos padrão
+- Ao criar a partir de preset, utiliza `copiar()` (Prototype)
+
+---
 
 ### RF04 — Ciclo de vida do anúncio
 Estados:
 - `RASCUNHO` → `MODERACAO` → `ATIVO` → `VENDIDO`
-- `SUSPENSO` (reprovado) com possibilidade de voltar para `RASCUNHO`
+- `SUSPENSO` (reprovado) com possibilidade de retorno para `RASCUNHO`
 
-Mudança de estado dispara evento (`StatusChangeEvent`) para listeners (Observer).
+Toda mudança de estado dispara um evento (`StatusChangeEvent`) para os listeners registrados (Observer).
+
+---
 
 ### RF03 — Moderação dinâmica
-- Pipeline de regras (Chain):
-  - termos proibidos (por config)
-  - preço inválido / suspeito
-  - título mínimo
-- Decisão:
-  - `AUTO_APROVAR` → passa para `ATIVO`
-  - `AUTO_REPROVAR` → vai para `SUSPENSO`
-  - `MANUAL` → permanece em `MODERACAO`
+- Pipeline de regras (Chain of Responsibility):
+  - termos proibidos (via configuração)
+  - preço inválido ou suspeito
+  - validações de conteúdo
 
-  ### RF06 — Pesquisa e visualização
-- Utilizado para permitir a aplicação de vários   filtros de busca ao mesmo tempo
+Decisão final:
+- `AUTO_APROVAR` → anúncio passa para `ATIVO`
+- `AUTO_REPROVAR` → anúncio vai para `SUSPENSO`
+- `MANUAL` → permanece em `MODERACAO`
+
+---
+
+### RF06 — Pesquisa e visualização
+- Implementada com **Decorator**, permitindo combinar múltiplos filtros dinamicamente
 - Filtros disponíveis:
-- Localização, preço, área mínima (comuns a todos)
-- Quartos
-- Quintal
-- Elevador
-- Finalidade
-- Zoneamento 
+  - Localização
+  - Preço
+  - Área mínima
+  - Quartos
+  - Quintal
+  - Elevador
+  - Finalidade
+  - Zoneamento
+
+---
+
+### RF05 — Notificações multi-canal
+- Definido o contrato `CanalNotificacao`
+- Implementado canal real:
+  - **TelegramService**, com envio via API HTTP oficial do Telegram
+- O sistema depende apenas da abstração, permitindo inclusão de novos canais sem alteração do código cliente
+
+---
+
+### RF08 — Carregamento eficiente de imagens
+- Implementado com o padrão **Proxy**
+- `ImagemProxy` controla o acesso ao objeto real (`ImagemReal`)
+- O carregamento pesado ocorre apenas quando a imagem é efetivamente exibida
+- Melhora desempenho e uso de recursos do sistema
